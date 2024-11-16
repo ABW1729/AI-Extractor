@@ -18,7 +18,6 @@ Before setting up the project, ensure you have the following installed:
 - Python 3.8 or higher
 - Streamlit
 - OAuth 2.0 credentials from Google console
-- Service account credentials from Google console
 - Google API Key 
 - Google Cloud Project with Sheets API enabled
 
@@ -62,11 +61,11 @@ To run this project, you will need to add the following environment variables to
 `SERPAPI_API_KEY`  
 `GROQ_API_KEY`  
 `GOOGLE_API_KEY`
+`OAuth Creds as json string`
 
 ## Live Deployment
 https://ai-extractor-uorlchtjiwqkknrxeamf3y.streamlit.app/  
 
-Save OAuth credentials as token.json and service account credentials as sheets.json in root of project
 ## Demo
 
 Loom Video Link for Demo:
