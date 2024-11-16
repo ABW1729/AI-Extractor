@@ -78,7 +78,11 @@ def extract_information_from_results(results, query):
     # Define the messages as expected by the Groq API
     
     messages = [
-        {"role": "user", "content": f"Extract the information for {query} from the following web results: {results}.Extract only the requested information from the following web results.If the user asks for email addresses, return only the email addresses in a python list, with no extra context, labels, or explanations. Just provide the response to the query asked without any additional statements pointing to the response.Don't write any unnecessary statements not relevant to the query asked."}
+        {"role": "user", "content": f"Extract the information for {query} from the following web results: {results}.
+        Extract only the requested information from the following web results.
+        If the user asks for email addresses, return only the email addresses in a python list, with no extra context, labels, or explanations.
+        Just provide the response to the query asked without any additional statements pointing to the response
+        .Don't write any unnecessary statements not relevant to the query asked."}
     ]
 
     # Define the payload with the model and messages
@@ -122,7 +126,7 @@ def extract_information_from_response(response, query):
     You are an information extractor. Analyse the query: {query} and the response: {response}.
     Your task is to extract the required attributes from the response text, omitting irrelevant labels and context.
     For example, if the query is "Get the email address of Ford" and the response text is "Here is the available information, the emails are ford@ford.com.",
-    Your response should be only ford@ford.com AND NO OTHER TEXT. If it's not found, return the string "No results found".
+    Your response should be only ford@ford.com AND NO OTHER TEXT. If it's not found, return the string "No results found".Separate multiple results by commas
     """
     prompt_template=ChatPromptTemplate.from_template(template_string)
     res=prompt_template.format_messages(response=response,query=query)
