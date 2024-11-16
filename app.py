@@ -12,13 +12,15 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from dotenv import load_dotenv  # Import dotenv to load environment variables
 import os
-
+import json
 
 
 OPENAI_API_KEY =st.secrets['OPENAI_API_KEY']
 GOOGLE_API_KEY = st.secrets['GOOGLE_API_KEY']
 SERPAPI_API_KEY =st.secrets['SERPAPI_API_KEY']
 GROQ_API_KEY = st.secrets['GROQ_API_KEY']
+credentials_json = st.secrets["google_oauth"]["credentials"]
+
 
 
 # Set OpenAI API key
@@ -30,14 +32,28 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 # Function to authenticate Google Sheets
 def authenticate_google_sheets():
     creds = None
-    if os.path.exists('sheets.json'):
-        creds = service_account.Credentials.from_service_account_file('sheets.json', scopes=SCOPES)
+    
+    # Check if token.json exists
+    if os.path.exists('token.json'):
+        creds = service_account.Credentials.from_service_account_file('token.json', scopes=SCOPES)
+    
+    # If no valid credentials are found, let the user log in and create token.json
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file('token.json', SCOPES)
+            # If token.json doesn't exist, use client secrets from Streamlit secrets
+            credentials_json = st.secrets["google_oauth"]["credentials"]
+            credentials_dict = json.loads(credentials_json)
+            
+            # Use OAuth flow to generate the token.json file
+            flow = InstalledAppFlow.from_client_secrets_info(credentials_dict, SCOPES)
             creds = flow.run_local_server(port=3000)
+            
+            # Save the credentials to token.json for future use
+            with open('token.json', 'w') as token:
+                token.write(creds.to_json())
+    
     return creds
 
 @sleep_and_retry
