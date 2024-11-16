@@ -1,12 +1,10 @@
 import streamlit as st
 import pandas as pd
 import requests
-import ast
 import openai
 from ratelimit import limits, sleep_and_retry
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.pydantic_v1 import BaseModel, Field, validator
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2 import service_account
@@ -14,9 +12,6 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from dotenv import load_dotenv  # Import dotenv to load environment variables
 import os
-import json
-import re
-import gspread
 
 load_dotenv()
 
@@ -59,8 +54,10 @@ def get_google_sheet_data(sheet_id, range_name):
         st.error(f"Error fetching Google Sheets data: {err}")
         return None
 
+
 @sleep_and_retry
 @limits(calls=60, period=60)
+@st.cache_data(ttl=3600)
 # Function to get search results using SerpAPI
 def get_search_results(query):
     try:
@@ -73,7 +70,7 @@ def get_search_results(query):
         return {}
 
 
-@st.cache_data(ttl=3600)
+
 @sleep_and_retry
 @limits(calls=5, period=10)
 # Function to extract information from results using Groq API
@@ -93,7 +90,7 @@ def extract_information_from_results(results, query):
     # Set up the headers with the Groq API key for authorization
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer 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"
+        "Authorization": f"Bearer {GROQ_API_KEY}"
     }
 
     # Send the POST request to Groq's API endpoint
@@ -115,17 +112,17 @@ def extract_information_from_results(results, query):
 
 
 
-@st.cache_data(ttl=3600)
+
 @sleep_and_retry
 @limits(calls=5, period=10)
 def extract_information_from_response(response, query):
     # Define the messages as expected by the Groq API
     chat_llm=ChatOpenAI(temperature=0.0)
     template_string = """
-    You are an information extractor. Analyse the query: {query} and the search esults in json: {response}.
+    You are an information extractor. Analyse the query: {query} and the response: {response}.
     Your task is to extract the required attributes from the response text, omitting irrelevant labels and context.
     For example, if the query is "Get the email address of Ford" and the response text is "Here is the available information, the emails are ford@ford.com.",
-    Your response should be only ford@ford.com. If it's not found, return the string "No results found".
+    Your response should be only ford@ford.com AND NO OTHER TEXT. If it's not found, return the string "No results found".
     """
     prompt_template=ChatPromptTemplate.from_template(template_string)
     res=prompt_template.format_messages(response=response,query=query)
