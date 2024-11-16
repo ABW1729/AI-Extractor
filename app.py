@@ -13,12 +13,12 @@ from googleapiclient.errors import HttpError
 from dotenv import load_dotenv  # Import dotenv to load environment variables
 import os
 
-load_dotenv()
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-SERPAPI_API_KEY = os.getenv('SERPAPI_API_KEY')
-GROQ_API_KEY = os.getenv('GROQ_API_KEY')
+
+OPENAI_API_KEY =st.secrets['OPENAI_API_KEY']
+GOOGLE_API_KEY = st.secrets['GOOGLE_API_KEY']
+SERPAPI_API_KEY =st.secrets['SERPAPI_API_KEY']
+GROQ_API_KEY = st.secrets['GROQ_API_KEY']
 
 
 # Set OpenAI API key
