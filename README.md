@@ -63,7 +63,8 @@ To run this project, you will need to add the following environment variables to
 `GROQ_API_KEY`  
 `GOOGLE_API_KEY`
 
-
+## Live Deployment
+https://ai-extractor-uorlchtjiwqkknrxeamf3y.streamlit.app/  
 
 Save OAuth credentials as token.json and service account credentials as sheets.json in root of project
 ## Demo
