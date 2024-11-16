@@ -60,7 +60,7 @@ To run this project, you will need to add the following environment variables to
 `OPENAPI_API_KEY`  
 `SERPAPI_API_KEY`  
 `GROQ_API_KEY`  
-`GOOGLE_API_KEY`
+`GOOGLE_API_KEY`  
 `OAuth Creds as json string`
 
 ## Live Deployment
