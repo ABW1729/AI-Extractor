@@ -56,7 +56,7 @@ streamlit run app.py
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to add the following environment variables to your secrets.toml file
 
 `OPENAPI_API_KEY`  
 `SERPAPI_API_KEY`  
