@@ -77,7 +77,7 @@ def get_search_results(query):
 def extract_information_from_results(results, query):
     # Define the messages as expected by the Groq API
     
-     messages = [
+    messages = [
         {"role": "user", "content": f"Extract the information for {query} from the following web results: {results}.Extract only the requested information from the following web results.If the user asks for email addresses, return only the email addresses in a python list, with no extra context, labels, or explanations. Just provide the response to the query asked without any additional statements pointing to the response.Don't write any unnecessary statements not relevant to the query asked."}
     ] 
 
